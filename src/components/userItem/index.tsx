@@ -1,15 +1,19 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 
-import { TChangeViewModal } from '../../store/mainStore/types';
 import { rootStore } from '../../index';
+
 interface IUserItemProps{
-	name?: string,
+	first_name?: string,
 	avatar?: string,
 	id?: number
 }
 
-const UserItem:React.FC<IUserItemProps> = observer(({ name, avatar, id }):JSX.Element => {
+// компонеет маленькой карточки юзера
+// в пропсы получает юзера
+// заглушки в имени и аватаре на случай отсутсвия данных
+
+const UserItem:React.FC<IUserItemProps> = observer(({ first_name, avatar, id }):JSX.Element => {
 	const { mainStore } = React.useContext(rootStore);
   return(
 		<figure className='user users__item' onClick={()=>mainStore.changeViewModal(id)}>
@@ -21,7 +25,7 @@ const UserItem:React.FC<IUserItemProps> = observer(({ name, avatar, id }):JSX.El
 				alt='Sooo cute user' 
 			/>
 			<figcaption className='user__title'>
-				{name || 'Unknown'}
+				{first_name || 'Unknown'}
 			</figcaption>
 		</figure>
 	)

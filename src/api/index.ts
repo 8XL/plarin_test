@@ -2,6 +2,9 @@ import axios from 'axios';
 
 import { IGetUsers, IGetUser, TUser } from './types';
 
+// Круд запросы. Возврат объекта с ошибкой для вставки заглушки
+//или редиректа
+
 const URL: string = 'https://reqres.in/api/users';
 
 const getUsers = async(num?:number) => {

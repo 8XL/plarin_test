@@ -8,13 +8,16 @@ interface IUserListProps{
   users: TUser[]
 }
 
+//получает массив объектов 
+//саспенс на случай большого массива данных
+
 const UserList:React.FC<IUserListProps> = observer(({ users }):JSX.Element => {
   return(
     <div className='users'  >
       <React.Suspense fallback={<div>Загрузка...</div>}>
         {
           users.map((user:TUser)=>(
-            <UserItem name={user.first_name} avatar={user.avatar} id={user.id} key={user.id} />
+            <UserItem {...user} key={user.id} />
           ))
         }
       </React.Suspense>

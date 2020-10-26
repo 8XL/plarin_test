@@ -1,8 +1,10 @@
-import { makeObservable, observable, computed, action, autorun, reaction } from 'mobx';
+import { makeObservable, observable, computed, action, autorun } from 'mobx';
 
 import { TUser, IGetUsers } from '../../api/types';
 import { getUsers } from '../../api';
 import { IMainStore, TFetchUsers, TModal, TChangeViewModal } from './types';
+
+// стор, отвечающий за основную логику приложения
 
 class mainStore implements IMainStore {
 
@@ -22,10 +24,11 @@ class mainStore implements IMainStore {
 			pagination: observable,
 			getPagination: computed,
 		})
-
+//при инициализации стора обращение к апи за списком пользователей
 		autorun(()=>this.fetchUsers())
 	}
 
+// ================= блок пользователей
 	users: TUser[] = []
 	errorUsers: boolean = false
 	
@@ -43,6 +46,7 @@ class mainStore implements IMainStore {
 		this.users = data.users!;
 	}
 
+// ================= блок модалки
 	modal: TModal = {
 		id: null,
 		view: false
@@ -66,6 +70,7 @@ class mainStore implements IMainStore {
 		}
 	}
 
+// ================= блок пагинации
 	pagination: number = 5
 
 	get getPagination():number{

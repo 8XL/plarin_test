@@ -21,6 +21,12 @@ interface IUserCardProps {
 	id: number
 }
 
+// в пропсы получает метод сворачивания модалки(она здесь 
+// совсем простая, чтобы выносить её в отдельный компонент)
+// и id юзера, которого надо запросить из апи.
+// чтобы не нагружать приложение и ввиду дополнительного запроса
+// к апи, было принято решение здесь создать локальный стор.
+
 const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Element => {
 	const userDetails:IUserDetails = useLocalObservable(()=>({
 		user: {},
@@ -32,17 +38,26 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Elem
 			this.user = data.user!;
 		},
 	}))
+// хук для инициализаирующий юзера
 	React.useEffect(()=>{
 		autorun(()=>userDetails.fetchUser(id))
 	}, [])
+// слушатель для модалки
 	React.useEffect(()=>{
 		document.addEventListener('click', closeModalWindow);
 		
 			return ()=> document.removeEventListener('click', closeModalWindow)
 	})
-
+// реф для модалки
 	const modal:React.Ref<HTMLDivElement> = React.useRef(null);
+// закрытие модалки
+	const closeModalWindow = React.useCallback((e: MouseEvent):void => {
+		e.preventDefault();
+		const el = e.target;
+		if(modal.current)(modal.current! as any).contains(el)&&closeModal();
+	}, [modal.current])
 
+// методы работы с апи
 	const onDelete = async(e: React.MouseEvent):Promise<void> => {
 		e.preventDefault();
 		if(window.confirm('a u sure?')){
@@ -54,10 +69,6 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Elem
 		await putUser(userDetails.user.id!, formData);
 		closeModal();
 	}
-	const closeModalWindow = React.useCallback((e: MouseEvent):void => {
-		const el = e.target;
-		if(modal.current)(modal.current! as any).contains(el)&&closeModal();
-	}, [modal.current])
 
   return(
 		<>
@@ -103,8 +114,7 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Elem
 
 			<div className='modal'
 				ref={ modal }
-			>
-			</div>
+			/>
 		</>
 	)
 })

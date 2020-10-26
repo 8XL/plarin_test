@@ -13,6 +13,10 @@ interface IFormProps {
 	className: string
 }
 
+//Компонент формы универсален и реиспользуемый за счет локального стора. 
+//В пропсы получает метод сабмита, id формы(для связки формы с инпутами),
+// класс и элементы композиции
+
 const Form:React.FC<IFormProps> = observer(({ onSubmit, id, className, children }):JSX.Element => {
 	const form: IForm = useLocalObservable(()=>({
 		data: {},
