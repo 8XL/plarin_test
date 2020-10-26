@@ -1,0 +1,59 @@
+import axios from 'axios';
+
+import { IGetUsers, IGetUser, TUser } from './types';
+
+const URL: string = 'https://reqres.in/api/users';
+
+const getUsers = async(num?:number) => {
+	try{
+		const { data } = await axios.get(num ? URL + `?page=${num}` : URL)
+		return {
+			users: data.data,
+			err: false
+		} as IGetUsers
+	} catch(err) {
+		return {err: true} as IGetUsers
+	}
+}
+
+const getUser = async(id: number) => {
+	try{
+		const { data } = await axios.get(URL + `/` + id);
+		return {
+			user: data.data,
+			err: false
+		} as  IGetUser
+	}catch(err){
+		return {err: true} as IGetUser
+	}
+}
+
+const postUser = (user: TUser) =>{
+	try {
+		axios.post(URL, user)
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+const deleteUser = async(id:number) => {
+	try {
+		axios.delete(URL + `/` + id)
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+const putUser = async(id: number, user:TUser) => {
+	try{
+		const { data } = await axios.put(URL + `/` + id, user);
+		return {
+			user: data.data,
+			err: false
+		} as  IGetUser
+	}catch(err){
+		return {err: true} as IGetUser
+	}
+}
+
+export { getUsers, getUser, deleteUser, putUser, postUser }
