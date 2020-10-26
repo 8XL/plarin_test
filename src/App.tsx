@@ -12,9 +12,21 @@ export const App:React.FC = observer(():JSX.Element => {
     <div className='container'>
       <main>
         <section className='users-wrapper'>
-            <UserList users={store.mainStore.getUsers} />
-            <UserAdder openModal={store.mainStore.changeViewModal} />
-            <Pagination value={store.mainStore.getPagination} changePage={store.mainStore.fetchUsers} />
+            {
+              !store.mainStore.getUsersError ? 
+              (
+                <>
+                  <UserList users={store.mainStore.getUsers} />
+                  <UserAdder openModal={store.mainStore.changeViewModal} />
+                  <Pagination value={store.mainStore.getPagination} changePage={store.mainStore.fetchUsers} />
+                </>
+              ) : (
+                <div className='users__error'>
+                  Oops, we have some problems...
+                </div>
+              )
+              
+            }
         </section>
 
         {

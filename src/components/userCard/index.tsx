@@ -8,6 +8,7 @@ import { Form } from '../';
 import { TChangeViewModal } from '../../store/mainStore/types';
 import { TUser, IGetUser } from "../../api/types";
 import { autorun } from 'mobx';
+import { format } from 'path';
 
 type TFetchUser = (id: number) => Promise<boolean | void>
 
@@ -28,12 +29,12 @@ interface IUserCardProps {
 // к апи, было принято решение здесь создать локальный стор.
 
 const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Element => {
-	const userDetails:IUserDetails = useLocalObservable(()=>({
+	const userDetails = useLocalObservable(():IUserDetails =>({
 		user: {},
 		errorUser: false,
 		async fetchUser(id:number):Promise<boolean | void>{
 			const data:IGetUser = await getUser(id);
-			if(data.err)return ;
+			if(data.err)return this.errorUser = true;
 			
 			this.user = data.user!;
 		},
@@ -92,19 +93,19 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Elem
 						<input 
 							name='first_name'
 							form='user'
-							defaultValue={ id ? userDetails.user.first_name : 'firts__name'}
+							defaultValue={ (!id || userDetails.errorUser) ? 'firts__name' : userDetails.user.first_name }
 							required
 						/>
 						<input 
 							name='last_name'
 							form='user'
-							defaultValue={ id ? userDetails.user.last_name : 'last__name'}
+							defaultValue={ (!id || userDetails.errorUser) ?'last__name' :  userDetails.user.last_name }
 							required
 						/>
 						<input 
 							name='email'
 							form='user'
-							defaultValue={ id ? userDetails.user.email : 'email'}
+							defaultValue={ (!id || userDetails.errorUser) ? 'email' : userDetails.user.email }
 							required
 						/>
 					</Form>
