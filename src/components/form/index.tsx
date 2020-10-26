@@ -10,14 +10,15 @@ interface IForm {
 interface IFormProps {
 	onSubmit: (formData: Record<string, any>) => void
 	id: string
-	className: string
+	classNameForm: string
+	classNameSubmit: string
 }
 
 //Компонент формы универсален и реиспользуемый за счет локального стора. 
 //В пропсы получает метод сабмита, id формы(для связки формы с инпутами),
 // класс и элементы композиции
 
-const Form:React.FC<IFormProps> = observer(({ onSubmit, id, className, children }):JSX.Element => {
+const Form:React.FC<IFormProps> = observer(({ onSubmit, id, classNameForm, classNameSubmit, children }):JSX.Element => {
 	const form: IForm = useLocalObservable(()=>({
 		data: {},
 		changeData(e: React.FormEvent):void {
@@ -42,12 +43,18 @@ const Form:React.FC<IFormProps> = observer(({ onSubmit, id, className, children 
 
 	return(
 		<form 
-			className={className}
+			className={classNameForm}
 			id={ id }
-			onSubmit={ form.submitData }
+			onSubmit={ (Object.values(form.data).length>0) ? form.submitData : ()=>alert('Enter anything!')}
 			onChange={ form.changeData }
 		>
 			{ children }
+			<button
+				onClick={ (Object.values(form.data).length>0) ? form.submitData : ()=>alert('Enter anything!') }
+				className={classNameSubmit}
+				type='submit'
+				form={id}
+			>Submit</button>
 		</form>
 	)
 })

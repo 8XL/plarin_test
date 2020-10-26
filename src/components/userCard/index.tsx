@@ -18,7 +18,7 @@ interface IUserDetails {
 }
 interface IUserCardProps {
 	closeModal: TChangeViewModal
-	id: number
+	id?: number
 }
 
 // в пропсы получает метод сворачивания модалки(она здесь 
@@ -40,7 +40,7 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Elem
 	}))
 // хук для инициализаирующий юзера
 	React.useEffect(()=>{
-		autorun(()=>userDetails.fetchUser(id))
+		id&&autorun(()=>userDetails.fetchUser(id))
 	}, [])
 // слушатель для модалки
 	React.useEffect(()=>{
@@ -83,21 +83,29 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Elem
 					alt='Sooo cute user' 
 				/>
 				<figcaption>
-					<Form onSubmit={ saveUser } id='user' className='card__form'>
+					<Form 
+						onSubmit={ saveUser } 
+						id='user' 
+						classNameForm='card__form' 
+						classNameSubmit='btn card__save-btn'
+					>
 						<input 
 							name='first_name'
 							form='user'
-							defaultValue={userDetails.user.first_name}
+							defaultValue={ id ? userDetails.user.first_name : 'firts__name'}
+							required
 						/>
 						<input 
 							name='last_name'
 							form='user'
-							defaultValue={ userDetails.user.last_name }
+							defaultValue={ id ? userDetails.user.last_name : 'last__name'}
+							required
 						/>
 						<input 
 							name='email'
 							form='user'
-							defaultValue={ userDetails.user.email }
+							defaultValue={ id ? userDetails.user.email : 'email'}
+							required
 						/>
 					</Form>
 				</figcaption>
@@ -105,11 +113,6 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Elem
 					className='btn card__del-btn'
 					onClick={ onDelete }
 				>Delete</button>
-				<button
-					className='btn card__save-btn'
-					type='submit'
-					form='user'
-				>Save</button>
 			</figure>
 
 			<div className='modal'

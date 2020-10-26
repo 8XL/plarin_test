@@ -13,7 +13,7 @@ export const App:React.FC = observer(():JSX.Element => {
       <main>
         <section className='users-wrapper'>
             <UserList users={store.mainStore.getUsers} />
-            <UserAdder />
+            <UserAdder openModal={store.mainStore.changeViewModal} />
             <Pagination value={store.mainStore.getPagination} changePage={store.mainStore.fetchUsers} />
         </section>
 

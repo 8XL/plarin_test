@@ -61,13 +61,8 @@ class mainStore implements IMainStore {
 	}
 
 	changeViewModal: TChangeViewModal = (id?:number) =>{		
-		if(id){
-			this.modal.id = id;
-			this.modal.view = true;
-		} else {
-			this.modal.id = null;
-			this.modal.view = false;
-		}
+		this.modal.id = id || null;
+		this.modal.view = !this.modal.view;
 	}
 
 // ================= блок пагинации
