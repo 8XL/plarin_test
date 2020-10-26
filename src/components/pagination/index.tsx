@@ -6,9 +6,9 @@ interface IPaginationProps {
 	changePage: (num: number)=> void
 }
 
-//Здесь я не совсем понял логику пагинации в тестовом,
-//ибо апи предоставляет только две страницы, 
-//так что количество страниц берется из заглушки в сторе
+// Здесь я не совсем понял логику пагинации в тестовом,
+// количество страниц берется из заглушки в сторе,
+// других вариантов я не нашел
 
 const Pagination:React.FC<IPaginationProps> = observer(({ value, changePage }):JSX.Element => {
 	const nums:number[] = [];

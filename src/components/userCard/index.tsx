@@ -8,7 +8,6 @@ import { Form } from '../';
 import { TChangeViewModal } from '../../store/mainStore/types';
 import { TUser, IGetUser } from "../../api/types";
 import { autorun } from 'mobx';
-import { format } from 'path';
 
 type TFetchUser = (id: number) => Promise<boolean | void>
 
@@ -99,7 +98,7 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Elem
 						<input 
 							name='last_name'
 							form='user'
-							defaultValue={ (!id || userDetails.errorUser) ?'last__name' :  userDetails.user.last_name }
+							defaultValue={ (!id || userDetails.errorUser) ? 'last__name' :  userDetails.user.last_name }
 							required
 						/>
 						<input 

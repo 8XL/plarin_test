@@ -66,7 +66,7 @@ class mainStore implements IMainStore {
 	}
 
 // ================= блок пагинации
-	pagination: number = 5
+	pagination: number = 2
 
 	get getPagination():number{
 		return this.pagination
