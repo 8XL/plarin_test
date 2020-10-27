@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { rootStore } from './';
-import { UserList, Pagination, UserCard, UserAdder } from './components';
+import { UserList, Pagination, UserCard, UserAdder, Radio } from './components';
 
 export const App:React.FC = observer(():JSX.Element => {
 
@@ -12,6 +12,7 @@ export const App:React.FC = observer(():JSX.Element => {
     <div className='container'>
       <main>
         <section className='users-wrapper'>
+          <Radio signs={['LocalStorage mode', 'Request mode']} changeMode={()=>console.log('aaaaa')} />
             {
               !store.mainStore.getUsersError ? 
               (

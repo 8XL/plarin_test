@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { TChangeViewModal } from '../../store/mainStore/types';
-import { postUser } from '../../api'
+import { TChangeViewModal } from '../../../../store/mainStore/types';
+import { postUser } from '../../../../api'
 import { observer } from 'mobx-react-lite';
 
 // здесь все совсем просто: открываем пустую модалку

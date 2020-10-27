@@ -174,3 +174,124 @@ body {
 			right: 0;
 		}
 }
+
+.checkbox-wrapper{
+	width: 20vw;
+	display: flex;
+	overflow: hidden;
+}
+
+*,*:before,*:after {
+  transition:.25s ease-in-out;
+}
+
+.checkbox-label {
+  display:block;
+  background:#f3f3f3;
+  height:5vw;
+	width:15vw;
+	max-width: 50px;
+	max-height: 25px;
+  border-radius:50px;
+  margin:50px auto;
+  position:relative;
+  box-shadow:0 0 0 2px #dddddd;
+  .on {
+    display:block;
+    position:absolute;
+    z-index:0;
+    left:-100;
+    opacity:1;
+    min-width:300px;
+    line-height:50px;
+    opacity:0;
+    color:$green;
+  }
+  .off {
+    display:block;
+    position:absolute;
+    z-index:0;
+    right:100px;
+    text-align:right;
+    opacity:1;
+    min-width:300px;
+    line-height:50px;
+		opacity:1;
+		
+		@media (max-width: 800px) {
+			opacity: 0;
+		}
+    color:#bbbbbb;
+  }
+  &:before {
+    content:'';
+    display:block;
+    position:absolute;
+    z-index:1;
+    top:0;
+    left:0;
+		border-radius:50px;
+		height: 5vw;
+		width: 5.5vw;
+    max-height:25px;
+    max-width: 25px;
+    background:white;
+    box-shadow:0 3px 3px rgba(0,0,0,.2),0 0 0 2px #dddddd;
+  }
+}
+
+.checkbox {
+  position:absolute;
+  left:-5000px;
+  &:checked {
+    + .checkbox-label {
+      background:$green;
+      box-shadow:0 0 0 2px $green;
+      .on {
+				left:0px;
+				transform: translate(-50%, 0);
+				opacity:1;
+
+				@media (max-width: 800px) {
+					opacity: 0;
+				}
+      }
+      .off {
+        right:0px;
+        opacity:0;
+      }
+      &:before {
+        left:30px;
+        box-shadow:0 3px 3px rgba(0,0,0,.2),0 0 0 2px $green;
+      }
+    }
+  }
+}
+
+.checkbox.blue {
+  position:absolute;
+  left:-5000px;
+  + .checkbox-label {
+    .on {
+      color:$blue;
+    }
+  }
+  &:checked {
+    + .checkbox-label {
+      background:$blue;
+      box-shadow:0 0 0 2px $blue;
+      .on {
+        left:100px;
+        opacity:1;
+      }
+      .off {
+        right:0px;
+        opacity:0;
+      }
+      &:before {
+        left:30px;
+        box-shadow:0 3px 3px rgba(0,0,0,.2),0 0 0 2px $blue;
+      }
+    }
+  }
+}

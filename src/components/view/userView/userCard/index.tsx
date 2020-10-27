@@ -1,12 +1,12 @@
 import React from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 
-import { getUser, deleteUser, putUser } from '../../api';
+import { getUser, deleteUser, putUser } from '../../../../api';
 
-import { Form } from '../';
+import { Form } from '../../../';
 
-import { TChangeViewModal } from '../../store/mainStore/types';
-import { TUser, IGetUser } from "../../api/types";
+import { TChangeViewModal } from '../../../../store/mainStore/types';
+import { TUser, IGetUser } from "../../../../api/types";
 import { autorun } from 'mobx';
 
 type TFetchUser = (id: number) => Promise<boolean | void>

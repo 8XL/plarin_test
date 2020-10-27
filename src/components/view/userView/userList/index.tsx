@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 
-import { TUser } from '../../api/types';
-import { UserItem } from '../';
+import { TUser } from '../../../../api/types';
+import { UserItem } from '..';
 
 interface IUserListProps{
   users: TUser[]

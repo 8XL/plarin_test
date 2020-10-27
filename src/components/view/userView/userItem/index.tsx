@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 
-import { rootStore } from '../../index';
+import { rootStore } from '../../../../index';
 
 interface IUserItemProps{
 	first_name?: string,
