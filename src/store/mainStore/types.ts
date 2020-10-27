@@ -11,6 +11,7 @@ export interface IMainStore {
 	users: TUser[]
 	errorUsers: boolean
 	getUsersError: boolean
+	setUsers: (data: TUser[])=>void
 	pagination: number
 	getPagination: number
 	getUsers: TUser[]
@@ -19,4 +20,7 @@ export interface IMainStore {
 	getModalId: number
 	getModalView: boolean
 	changeViewModal: TChangeViewModal
+	workMode: boolean
+	getWorkMode: boolean
+	toggleWorkMode: ()=>void
 }

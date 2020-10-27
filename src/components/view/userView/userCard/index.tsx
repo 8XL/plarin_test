@@ -1,13 +1,15 @@
 import React from 'react';
+import { autorun } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 
+import { getLocalStorageData, setLocalStorageData } from '../../../../modules'
 import { getUser, deleteUser, putUser } from '../../../../api';
 
 import { Form } from '../../../';
 
 import { TChangeViewModal } from '../../../../store/mainStore/types';
 import { TUser, IGetUser } from "../../../../api/types";
-import { autorun } from 'mobx';
+
 
 type TFetchUser = (id: number) => Promise<boolean | void>
 
@@ -18,6 +20,8 @@ interface IUserDetails {
 }
 interface IUserCardProps {
 	closeModal: TChangeViewModal
+	mode: boolean
+	setUsers: (users: TUser[])=>void
 	id?: number
 }
 
@@ -27,29 +31,42 @@ interface IUserCardProps {
 // чтобы не нагружать приложение и ввиду дополнительного запроса
 // к апи, было принято решение здесь создать локальный стор.
 
-const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Element => {
+//================UPD 
+//добавил возможность работы через localstorage(проп mode).
+//методы работы с карточками так же зависят от мода
+
+const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, mode, setUsers, id }):JSX.Element => {
 	const userDetails = useLocalObservable(():IUserDetails =>({
 		user: {},
 		errorUser: false,
 		async fetchUser(id:number):Promise<boolean | void>{
-			const data:IGetUser = await getUser(id);
-			if(data.err)return this.errorUser = true;
-			
-			this.user = data.user!;
+			if(!mode){ 
+				const data: IGetUser= await getUser(id);
+				if(data.err)return this.errorUser = true;
+				this.user = data.user!;
+			} else {
+				getLocalStorageData().forEach(el=>{
+					if(el.id === id)this.user = el as TUser;
+				})
+			}
 		},
 	}))
+
 // хук для инициализаирующий юзера
 	React.useEffect(()=>{
 		id&&autorun(()=>userDetails.fetchUser(id))
 	}, [])
+
 // слушатель для модалки
 	React.useEffect(()=>{
 		document.addEventListener('click', closeModalWindow);
 		
 			return ()=> document.removeEventListener('click', closeModalWindow)
 	})
+
 // реф для модалки
 	const modal:React.Ref<HTMLDivElement> = React.useRef(null);
+
 // закрытие модалки
 	const closeModalWindow = React.useCallback((e: MouseEvent):void => {
 		e.preventDefault();
@@ -57,16 +74,36 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Elem
 		if(modal.current)(modal.current! as any).contains(el)&&closeModal();
 	}, [modal.current])
 
-// методы работы с апи
+// методы работы с апи/localstorage
 	const onDelete = async(e: React.MouseEvent):Promise<void> => {
 		e.preventDefault();
 		if(window.confirm('a u sure?')){
-			await deleteUser(userDetails.user.id!)
+			if(!mode){
+				await deleteUser(userDetails.user.id!);	
+			} else {
+				const users:TUser[] = getLocalStorageData().filter(el=>el.id !==userDetails.user.id);
+				setUsers(users);
+			}
 			closeModal();
 		}
 	}
-	const saveUser = async(formData:Record<string, any>):Promise<void> => {
-		await putUser(userDetails.user.id!, formData);
+	const saveUser = async(formData:TUser):Promise<void> => {
+		if(!mode){
+			await putUser(userDetails.user.id!, formData);	
+		} else {
+			const arr = getLocalStorageData();
+			!formData.id ? formData.id = Date.now() : formData.id = id;
+			if(!id){
+				arr.push(formData);
+			} else {
+				arr.find((el, i)=>{
+					if(el.id === id)arr.splice(i, 1, formData)
+				})
+			}
+			console.log(arr)
+			const users: TUser[] = arr;
+			setUsers(users)
+		}
 		closeModal();
 	}
 
@@ -88,23 +125,24 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, id }):JSX.Elem
 						id='user' 
 						classNameForm='card__form' 
 						classNameSubmit='btn card__save-btn'
+						prevData={ userDetails.user && userDetails.user! as Record<string, string | number>}
 					>
 						<input 
 							name='first_name'
 							form='user'
-							defaultValue={ (!id || userDetails.errorUser) ? 'firts__name' : userDetails.user.first_name }
+							placeholder={ (!id || userDetails.errorUser) ? 'firts__name' : userDetails.user.first_name }
 							required
 						/>
 						<input 
 							name='last_name'
 							form='user'
-							defaultValue={ (!id || userDetails.errorUser) ? 'last__name' :  userDetails.user.last_name }
+							placeholder={ (!id || userDetails.errorUser) ? 'last__name' :  userDetails.user.last_name }
 							required
 						/>
 						<input 
 							name='email'
 							form='user'
-							defaultValue={ (!id || userDetails.errorUser) ? 'email' : userDetails.user.email }
+							placeholder={ (!id || userDetails.errorUser) ? 'email' : userDetails.user.email }
 							required
 						/>
 					</Form>

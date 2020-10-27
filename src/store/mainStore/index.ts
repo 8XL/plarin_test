@@ -1,7 +1,9 @@
-import { makeObservable, observable, computed, action, autorun } from 'mobx';
+import { makeObservable, observable, computed, action, autorun, reaction } from 'mobx';
 
 import { TUser, IGetUsers } from '../../api/types';
 import { getUsers } from '../../api';
+import { setLocalStorageData } from '../../modules'
+
 import { IMainStore, TFetchUsers, TModal, TChangeViewModal } from './types';
 
 // стор, отвечающий за основную логику приложения
@@ -23,9 +25,24 @@ class mainStore implements IMainStore {
 
 			pagination: observable,
 			getPagination: computed,
+
+			workMode: observable,
+			getWorkMode: computed,
+			toggleWorkMode: action,
 		})
 //при инициализации стора обращение к апи за списком пользователей
 		autorun(()=>this.fetchUsers())
+		reaction(()=>this.getWorkMode,
+		mode => {
+			if(mode){
+				setLocalStorageData(this.users)
+			}
+		})
+		reaction(()=> this.getUsers,
+		users=> {
+			setLocalStorageData(users)
+		}
+		)
 	}
 
 // ================= блок пользователей
@@ -39,11 +56,15 @@ class mainStore implements IMainStore {
 		return this.errorUsers
 	}
 
+	setUsers = (users: TUser[]) => {
+		this.users = users
+	}
+
 	fetchUsers: TFetchUsers = async(num?: number) => {
-		const data:IGetUsers = await getUsers(num);
-		if(data.err)return this.errorUsers = true;
+			const data:IGetUsers = await getUsers(num);
+			if(data.err)return this.errorUsers = true;
 		
-		this.users = data.users!;
+			this.setUsers(data.users! as TUser[])
 	}
 
 // ================= блок модалки
@@ -70,6 +91,17 @@ class mainStore implements IMainStore {
 
 	get getPagination():number{
 		return this.pagination
+	}
+
+//================== блок работы с датой
+	workMode: boolean = false
+
+	get getWorkMode(): boolean{
+		return this.workMode
+	}
+
+	toggleWorkMode = (): void => {
+		this.workMode = !this.workMode
 	}
 }
 

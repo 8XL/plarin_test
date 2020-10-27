@@ -9,7 +9,7 @@ interface IPaginationProps {
 const Radio:React.FC<IPaginationProps> = observer(({ signs, changeMode}):JSX.Element => {
 	
   return(
-    <div className='checkbox-wrapper'>
+    <div className='panel__checkbox'>
 			<input className="checkbox" id="checkbox1" type="checkbox" onChange={()=>changeMode()}/>
 			<label htmlFor="checkbox1" className="checkbox-label">
 				<span className="on">{signs[0]}</span>

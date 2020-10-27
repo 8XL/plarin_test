@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getLocalStorageData } from '../modules';
 
 import { IGetUsers, IGetUser, TUser } from './types';
 
@@ -59,4 +60,11 @@ const putUser = async(id: number, user:TUser) => {
 	}
 }
 
-export { getUsers, getUser, deleteUser, putUser, postUser }
+const saveChanges = async(): Promise<void> => {
+	getLocalStorageData().forEach(user=>{
+		putUser(user.id!, user)
+	})
+	window.location.reload()
+}
+
+export { getUsers, getUser, deleteUser, putUser, postUser, saveChanges }
