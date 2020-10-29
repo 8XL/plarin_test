@@ -61,6 +61,7 @@ export const App:React.FC = observer(():JSX.Element => {
           &&<UserCard 
               closeModal={ store.mainStore.changeViewModal }
               mode={ store.mainStore.getWorkMode }
+              getUsers={ store.mainStore.getUsers }
               setUsers={ store.mainStore.setUsers }
               id={ store.mainStore.getModalId }
             />

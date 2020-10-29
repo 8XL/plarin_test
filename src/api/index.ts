@@ -34,7 +34,9 @@ const getUser = async(id: number) => {
 
 const postUser = (user: TUser) =>{
 	try {
-		axios.post(URL, user)
+		axios.post(URL, {
+			data: JSON.stringify(user)
+		})
 	} catch (error) {
 		console.log(error)
 	}
@@ -50,7 +52,9 @@ const deleteUser = async(id:number) => {
 
 const putUser = async(id: number, user:TUser) => {
 	try{
-		const { data } = await axios.put(URL + `/` + id, user);
+		const { data } = await axios.put(URL + `/` + id, {
+			data: JSON.stringify(user)
+		});
 		return {
 			user: data.data,
 			err: false

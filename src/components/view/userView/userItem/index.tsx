@@ -16,7 +16,7 @@ interface IUserItemProps{
 const UserItem:React.FC<IUserItemProps> = observer(({ first_name, avatar, id }):JSX.Element => {
 	const { mainStore } = React.useContext(rootStore);
   return(
-		<figure className='user users__item' onClick={()=>mainStore.changeViewModal(id)}>
+		<figure className={`user users__item`} onClick={()=>mainStore.changeViewModal(id)}>
 			<img 
 				className='user__image'
 				src={ avatar || 'https://my-engine.ru/modules/users/avatar.png' } 

@@ -52,6 +52,7 @@ class mainStore implements IMainStore {
 	get getUsers():TUser[]{
 		return this.users		
 	}
+
 	get getUsersError():boolean{
 		return this.errorUsers
 	}

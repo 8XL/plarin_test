@@ -21,6 +21,7 @@ interface IUserDetails {
 interface IUserCardProps {
 	closeModal: TChangeViewModal
 	mode: boolean
+	getUsers: TUser[]
 	setUsers: (users: TUser[])=>void
 	id?: number
 }
@@ -35,7 +36,7 @@ interface IUserCardProps {
 //добавил возможность работы через localstorage(проп mode).
 //методы работы с карточками так же зависят от мода
 
-const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, mode, setUsers, id }):JSX.Element => {
+const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, mode, getUsers, setUsers, id }):JSX.Element => {
 	const userDetails = useLocalObservable(():IUserDetails =>({
 		user: {},
 		errorUser: false,
@@ -79,7 +80,8 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, mode, setUsers
 		e.preventDefault();
 		if(window.confirm('a u sure?')){
 			if(!mode){
-				await deleteUser(userDetails.user.id!);	
+				await deleteUser(userDetails.user.id!);
+				setUsers(getUsers.filter(el=>el.id !==userDetails.user.id));	
 			} else {
 				const users:TUser[] = getLocalStorageData().filter(el=>el.id !==userDetails.user.id);
 				setUsers(users);
@@ -88,11 +90,20 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, mode, setUsers
 		}
 	}
 	const saveUser = async(formData:TUser):Promise<void> => {
+		!formData.id ? formData.id = Date.now() : formData.id = id;
+		let arr: TUser[];
 		if(!mode){
-			await putUser(userDetails.user.id!, formData);	
+			arr = getUsers;
+			await putUser(formData.id!, formData);
+			if(!id){
+				arr.push(formData);
+			} else {
+				getUsers.find((el, i)=>{
+					if(el.id === id)arr.splice(i, 1, formData)
+				})
+			}		
 		} else {
-			const arr = getLocalStorageData();
-			!formData.id ? formData.id = Date.now() : formData.id = id;
+			arr = getLocalStorageData();
 			if(!id){
 				arr.push(formData);
 			} else {
@@ -100,10 +111,8 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, mode, setUsers
 					if(el.id === id)arr.splice(i, 1, formData)
 				})
 			}
-			console.log(arr)
-			const users: TUser[] = arr;
-			setUsers(users)
 		}
+		setUsers(arr);
 		closeModal();
 	}
 

@@ -3,14 +3,16 @@
 
 body {
   background-color: $background;
-  padding: 50px 0;
+	padding: 50px 0;
+	animation: slow-view 1.5s ease-in-out;
+
   @media (max-width: 768px) {
     padding: 20px 0;
   }
 }
 
 *,*:before,*:after {
-  transition:.25s ease-in-out;
+  transition: $m-animation;
 }
 
 .btn {
@@ -74,6 +76,7 @@ body {
 		&__item, .plus{
 			width: 128px;
 			height: 128px;
+			border-radius: 10px;
 		}
 		&__error{
 			text-align: center;
@@ -83,6 +86,11 @@ body {
 
 .user{
 	position: relative;
+
+	box-shadow: $m-shadow;
+	transition: $l-animation;
+	animation: spring $l-animation ease-in-out;
+
 	&__image{
 		border: 2px solid $black;
 		border-radius: 10px;
@@ -98,13 +106,23 @@ body {
 	}
 }
 
+@keyframes spring {
+	0%{
+		transform: translate(0, -100px);
+		z-index: 100001;
+	}
+}
+
 .plus{
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	margin: $global-spacing;
-	background-color: $icon-bg;
+	background-color: lightness($color: $green);
 	border-radius: $radius;
+
+	box-shadow: $m-shadow;
+	animation: spring $l-animation ease-in-out;
 
 	@media (max-width: 800px) {
 		margin: $global-spacing * $m-factor;
@@ -151,6 +169,7 @@ body {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	opacity: 1;
 	z-index: 1001;
 	align-items: center;
 
@@ -161,10 +180,12 @@ body {
 
 	min-width: 250px;
 	min-height: 350px;
+	
 
 	background-color: #fff;
 	border: 4px solid $black;
 	border-radius: $radius;
+	animation: slow-view $m-animation;
 	
 		&__form{
 			display: flex;
@@ -191,6 +212,15 @@ body {
 		}
 }
 
+@keyframes slow-view {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
 .panel{
 	position: relative;
 	width: 100%;
@@ -199,6 +229,7 @@ body {
 		position: absolute;
 		top: 20px;
 		right: 40px;
+		animation: slow-view $m-animation;
 
 		@media (max-width: 800px) {
 			top: -10px;
@@ -244,7 +275,8 @@ body {
 			opacity: 0;
 		}
     color:#bbbbbb;
-  }
+	}
+	
   &:before {
     content:'';
     display:block;
