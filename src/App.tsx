@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { rootStore } from './';
-import { UserList, Pagination, UserCard, UserAdder, Radio } from './components';
+import { UserList, Pagination, UserCard, UserAdder, Radio, Modal } from './components';
 import { saveChanges } from './api'
 
 //если работается через апи напрямую, то запросы так же отправляются сразу к апи
@@ -57,14 +57,16 @@ export const App:React.FC = observer(():JSX.Element => {
         </section>
 
         {
-        store.mainStore.getModalView
-          &&<UserCard 
+        store.mainStore.getModalView &&
+          <Modal closeModal={ store.mainStore.changeViewModal }>
+            <UserCard 
               closeModal={ store.mainStore.changeViewModal }
               mode={ store.mainStore.getWorkMode }
               getUsers={ store.mainStore.getUsers }
               setUsers={ store.mainStore.setUsers }
               id={ store.mainStore.getModalId }
             />
+          </Modal>
         }
 
       </main>
