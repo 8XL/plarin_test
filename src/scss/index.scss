@@ -12,7 +12,7 @@ body {
 }
 
 *,*:before,*:after {
-  transition: $m-animation;
+  transition: $m-animation ease-in-out;
 }
 
 .btn {
@@ -28,6 +28,12 @@ body {
 	border: 2px solid $green;
 	border-radius: $button-radius;
 	color: $green;
+
+	&:hover {
+		border: 2px solid $green;
+		background-color: $green;
+		color: #fff;
+	}
 }
 
 .container {
@@ -88,7 +94,7 @@ body {
 	position: relative;
 
 	box-shadow: $m-shadow;
-	transition: $l-animation;
+	transition: $l-animation ease-in-out;
 	animation: spring $l-animation ease-in-out;
 
 	&__image{
@@ -118,7 +124,6 @@ body {
 	justify-content: center;
 	align-items: center;
 	margin: $global-spacing;
-	background-color: lightness($color: $green);
 	border-radius: $radius;
 
 	box-shadow: $m-shadow;
@@ -129,6 +134,10 @@ body {
 	}
 	@media (max-width: 400px) {
 		margin: $global-spacing * $m-factor;
+	}
+
+	&:hover{
+		background-color: lighten($color: $green, $amount: 30);
 	}
 	
 	&__icon{
@@ -154,10 +163,12 @@ body {
 	top: 0;
   right: 0;
   bottom: 0;
-  left: 0;
-  background: rgba(0,0,0,0.8);
+	left: 0;
+	
+	background: rgba(0,0,0,0.8);
+	backdrop-filter: blur(5px);
+	-webkit-backdrop-filter: blur(5px);
   z-index: 1000;
-
 }
 
 .icon{
@@ -185,6 +196,7 @@ body {
 	background-color: #fff;
 	border: 4px solid $black;
 	border-radius: $radius;
+
 	animation: slow-view $m-animation;
 	
 		&__form{

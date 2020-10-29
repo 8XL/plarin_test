@@ -2,7 +2,7 @@ import React from 'react';
 import { autorun } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 
-import { getLocalStorageData, setLocalStorageData } from '../../../../modules'
+import { getLocalStorageData } from '../../../../modules'
 import { getUser, deleteUser, putUser } from '../../../../api';
 
 import { Form } from '../../../';
@@ -13,17 +13,17 @@ import { TUser, IGetUser } from "../../../../api/types";
 
 type TFetchUser = (id: number) => Promise<boolean | void>
 
-interface IUserDetails {
-	user: TUser
-	errorUser: boolean
-	fetchUser: TFetchUser
-}
 interface IUserCardProps {
 	closeModal: TChangeViewModal
 	mode: boolean
 	getUsers: TUser[]
 	setUsers: (users: TUser[])=>void
 	id?: number
+}
+interface IUserDetails {
+	user: TUser
+	errorUser: boolean
+	fetchUser: TFetchUser
 }
 
 // в пропсы получает метод сворачивания модалки(она здесь 
@@ -59,22 +59,7 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, mode, getUsers
 	}, [])
 
 // слушатель для модалки
-	React.useEffect(()=>{
-		document.addEventListener('click', closeModalWindow);
-		
-			return ()=> document.removeEventListener('click', closeModalWindow)
-	})
-
-// реф для модалки
-	const modal:React.Ref<HTMLDivElement> = React.useRef(null);
-
-// закрытие модалки
-	const closeModalWindow = React.useCallback((e: MouseEvent):void => {
-		e.preventDefault();
-		const el = e.target;
-		if(modal.current)(modal.current! as any).contains(el)&&closeModal();
-	}, [modal.current])
-
+	
 // методы работы с апи/localstorage
 	const onDelete = async(e: React.MouseEvent):Promise<void> => {
 		e.preventDefault();
@@ -91,6 +76,7 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, mode, getUsers
 	}
 	const saveUser = async(formData:TUser):Promise<void> => {
 		!formData.id ? formData.id = Date.now() : formData.id = id;
+		if(JSON.stringify(formData) === JSON.stringify(userDetails.user))return alert('Make your changes, pls')
 		let arr: TUser[];
 		if(!mode){
 			arr = getUsers;
@@ -162,9 +148,7 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, mode, getUsers
 				>Delete</button>
 			</figure>
 
-			<div className='modal'
-				ref={ modal }
-			/>
+			
 		</>
 	)
 })
