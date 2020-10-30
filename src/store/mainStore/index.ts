@@ -40,6 +40,8 @@ class mainStore implements IMainStore {
 		mode => {
 			if(mode){
 				setLocalStorageData(this.users)
+			} else {
+				this.fetchUsers()
 			}
 		})
 		reaction(()=> this.getUsers,
@@ -106,6 +108,10 @@ class mainStore implements IMainStore {
 	}
 
 	toggleWorkMode = (): void => {
+		if(this.getWorkMode)
+			if(!window.confirm('r u save all changes?')){
+				return 
+			}
 		this.workMode = !this.workMode
 	}
 

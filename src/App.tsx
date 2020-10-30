@@ -23,6 +23,7 @@ export const App:React.FC = observer(():JSX.Element => {
           <div className='panel'>
             <Radio 
               signs={ ['LocalStorage mode', 'API mode'] } 
+              checked={ store.mainStore.getWorkMode }
               changeMode={ ()=>store.mainStore.toggleWorkMode() } 
             />
             {

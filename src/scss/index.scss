@@ -11,8 +11,8 @@ body {
   }
 }
 
-*,*:before,*:after {
-  transition: $m-animation ease-in-out;
+*, *:before,*:after {
+  transition: $m-animation ease;
 }
 
 .btn {
@@ -69,6 +69,7 @@ body {
 	grid-gap: $global-spacing;
 	justify-items: center; 
 	grid-row-end: 1fr;
+	perspective: 1000px;
 
 	@media (max-width: 800px) {
 		grid-template-columns: repeat(2, 1fr);
@@ -92,9 +93,9 @@ body {
 
 .user{
 	position: relative;
+	transform-style: preserve-3d;
 
-	box-shadow: $m-shadow;
-	transition: $l-animation ease-in-out;
+	box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2), 0px 0px 50px rgba(0, 0, 0, 0.2);
 	animation: spring $l-animation ease-in-out;
 
 	&__image{
