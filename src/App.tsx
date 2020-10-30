@@ -26,7 +26,7 @@ export const App:React.FC = observer(():JSX.Element => {
               changeMode={ ()=>store.mainStore.toggleWorkMode() } 
             />
             {
-              store.mainStore.getWorkMode 
+              (store.mainStore.getWorkMode && store.mainStore.getFlagChanged)
               && <button 
                 className='btn default-btn panel__btn'
                 onClick={ saveChanges }

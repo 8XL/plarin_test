@@ -3,7 +3,8 @@ export type TUser = {
 	email?: string,
 	first_name?: string,
 	last_name?: string,
-	avatar?: string
+	avatar?: string,
+	changed?: boolean
 };
 export interface IGetUsers {
 	err: boolean,

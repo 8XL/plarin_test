@@ -110,6 +110,10 @@ body {
 		color: #fff;
 		border-radius: 0 0 $radius $radius;
 	}
+
+	&.changed{
+		filter: drop-shadow(0 0 0.75rem $green);
+	}
 }
 
 @keyframes spring {
@@ -128,6 +132,8 @@ body {
 
 	box-shadow: $m-shadow;
 	animation: spring $l-animation ease-in-out;
+
+	cursor: pointer;
 
 	@media (max-width: 800px) {
 		margin: $global-spacing * $m-factor;

@@ -64,40 +64,37 @@ const UserCard:React.FC<IUserCardProps> = observer(({ closeModal, mode, getUsers
 	const onDelete = async(e: React.MouseEvent):Promise<void> => {
 		e.preventDefault();
 		if(window.confirm('a u sure?')){
-			if(!mode){
-				await deleteUser(userDetails.user.id!);
-				setUsers(getUsers.filter(el=>el.id !==userDetails.user.id));	
-			} else {
-				const users:TUser[] = getLocalStorageData().filter(el=>el.id !==userDetails.user.id);
-				setUsers(users);
-			}
+			const arr: TUser[] = !mode ? getUsers : getLocalStorageData();
+			(!mode) && await deleteUser(userDetails.user.id!);
+			const filteredArr: TUser[] = arr.filter(el=>el.id !==userDetails.user.id);
+			setUsers(filteredArr);
+
 			closeModal();
 		}
 	}
+
+	const addFlagOfChange = (obj: TUser): TUser=>{
+		obj.changed = true;
+		return obj
+	}
+
 	const saveUser = async(formData:TUser):Promise<void> => {
 		!formData.id ? formData.id = Date.now() : formData.id = id;
+		// проверка формы на внесенные изменения
 		if(JSON.stringify(formData) === JSON.stringify(userDetails.user))return alert('Make your changes, pls')
-		let arr: TUser[];
-		if(!mode){
-			arr = getUsers;
-			await putUser(formData.id!, formData);
-			if(!id){
-				arr.push(formData);
-			} else {
-				getUsers.find((el, i)=>{
-					if(el.id === id)arr.splice(i, 1, formData)
-				})
-			}		
-		} else {
-			arr = getLocalStorageData();
-			if(!id){
-				arr.push(formData);
-			} else {
-				arr.find((el, i)=>{
-					if(el.id === id)arr.splice(i, 1, formData)
-				})
-			}
-		}
+
+		const arr: TUser[] = !mode ? getUsers : getLocalStorageData();
+		//отправляем запрос к апи, если api mode
+		(!mode)&& await putUser(formData.id!, formData);	
+		// добавляем флаг внесения изменений
+		const user = addFlagOfChange(formData);
+		//меняем интерфейс
+		!id 
+		? arr.push(user) 
+		: arr.find((el, i)=>{
+			if(el.id === id)arr.splice(i, 1, user)
+		});
+		//обновляем интерфейс
 		setUsers(arr);
 		closeModal();
 	}

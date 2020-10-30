@@ -29,6 +29,10 @@ class mainStore implements IMainStore {
 			workMode: observable,
 			getWorkMode: computed,
 			toggleWorkMode: action,
+
+			flagChanged: observable,
+			getFlagChanged: computed,
+			toggleFlagChanged: action
 		})
 //при инициализации стора обращение к апи за списком пользователей
 		autorun(()=>this.fetchUsers())
@@ -40,9 +44,9 @@ class mainStore implements IMainStore {
 		})
 		reaction(()=> this.getUsers,
 		users=> {
-			setLocalStorageData(users)
-		}
-		)
+			setLocalStorageData(users);
+			this.getWorkMode && this.toggleFlagChanged()
+		})
 	}
 
 // ================= блок пользователей
@@ -103,6 +107,17 @@ class mainStore implements IMainStore {
 
 	toggleWorkMode = (): void => {
 		this.workMode = !this.workMode
+	}
+
+//================== флаг внесенных изменений
+	flagChanged: boolean = false
+
+	get getFlagChanged(): boolean{
+		return this.flagChanged
+	}
+
+	toggleFlagChanged = ():void =>{
+		this.flagChanged = true;
 	}
 }
 

@@ -63,12 +63,12 @@ const putUser = async(id: number, user:TUser) => {
 		return {err: true} as IGetUser
 	}
 }
-
+// отправка изменений
 const saveChanges = async(): Promise<void> => {
-	getLocalStorageData().forEach(user=>{
-		putUser(user.id!, user)
-	})
-	window.location.reload()
+	getLocalStorageData().forEach( async user=>{
+		user.changed&& await putUser(user.id!, user)
+	});
+	setTimeout(()=>window.location.reload());
 }
 
 export { getUsers, getUser, deleteUser, putUser, postUser, saveChanges }

@@ -23,4 +23,7 @@ export interface IMainStore {
 	workMode: boolean
 	getWorkMode: boolean
 	toggleWorkMode: ()=>void
+	flagChanged: boolean
+	getFlagChanged: boolean
+	toggleFlagChanged: ()=>void
 }
